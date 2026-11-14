@@ -1,6 +1,6 @@
 //! Desktop pixel pet that reacts to your Claude Code usage.
 //! Run:     pixel_pet.exe            (drag with left mouse, right-click for menu)
-//! Preview: pixel_pet.exe --preview  (writes pet_preview.gif)
+//! Preview: pixel_pet.exe --preview  (writes pet_preview.gif and pet_skins.gif)
 //! Test:    cargo test
 #![windows_subsystem = "windows"]
 
@@ -570,16 +570,22 @@ fn run() {
     }
 }
 
-/// Writes pet_preview.gif for the README: every mood (columns) in every skin (rows), animated.
+/// Writes the README GIFs: pet_preview.gif (every mood) and pet_skins.gif (every mood in each skin).
 fn preview() -> Result<(), Box<dyn std::error::Error>> {
+    write_gif("pet_preview.gif", &SKINS[..1])?;
+    write_gif("pet_skins.gif", &SKINS[1..])
+}
+
+/// One animated GIF: moods as columns, the given skins as rows.
+fn write_gif(path: &str, skins: &[&str]) -> Result<(), Box<dyn std::error::Error>> {
     let (cw, ch) = ((W * S) as usize, (H * S) as usize);
-    let (fw, fh) = (cw * STATES.len(), ch * SKINS.len());
-    let mut enc = gif::Encoder::new(fs::File::create("pet_preview.gif")?, fw as u16, fh as u16, &[])?;
+    let (fw, fh) = (cw * STATES.len(), ch * skins.len());
+    let mut enc = gif::Encoder::new(fs::File::create(path)?, fw as u16, fh as u16, &[])?;
     enc.set_repeat(gif::Repeat::Infinite)?;
     for t in 0..48 {
         // 48 ticks = 12 s, a whole cycle of every animation (blink 16, Zz 6, flower 8)
         let mut rgb = vec![0u8; fw * fh * 3];
-        for (row, skin) in SKINS.iter().enumerate() {
+        for (row, skin) in skins.iter().enumerate() {
             for (col, s) in STATES.iter().enumerate() {
                 let buf = render(s, t, skin);
                 for py in 0..ch {
@@ -602,7 +608,7 @@ fn preview() -> Result<(), Box<dyn std::error::Error>> {
 fn main() {
     if std::env::args().any(|a| a == "--preview") {
         if let Err(e) = preview() {
-            let text = wide(&format!("Couldn't write pet_preview.gif: {e}"));
+            let text = wide(&format!("Couldn't write the preview GIFs: {e}"));
             unsafe { MessageBoxW(ptr::null_mut(), text.as_ptr(), wide("Pixel Pet").as_ptr(), MB_ICONERROR) };
         }
     } else {

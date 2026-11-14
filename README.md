@@ -2,7 +2,7 @@
 
 A tiny pixel-art pet that sits on your Windows desktop and reacts to how you use Claude Code. Written in Rust: one small `.exe`, about 13 MB of memory while running.
 
-![The five moods (idle, working, sleeping, scream, RIP) in every skin (none, headphones, crown, cat ears, beanie), animated](pet_preview.gif)
+![The five moods, animated: idle, working, sleeping, scream, RIP](pet_preview.gif)
 
 | Mood | When |
 |---|---|
@@ -12,9 +12,13 @@ A tiny pixel-art pet that sits on your Windows desktop and reacts to how you use
 | **Scream** 😱 | You've used 80% of your 5-hour limit |
 | **RIP**: tombstone with a flower | You've used 100% of your weekly limit |
 
-Dress it up with a skin: **headphones**, a **crown**, **cat ears** or a **beanie** (or none). The skin shows in every mood, even on the tombstone.
-
 > Unofficial fan project. Not made by or affiliated with Anthropic.
+
+## Skins
+
+Dress it up with a skin: **headphones**, a **crown**, **cat ears** or a **beanie** (or none). The skin shows in every mood, even on the tombstone. Right-click the pet → **Skin** to pick one.
+
+![Every mood in each skin, animated: headphones, crown, cat ears, beanie](pet_skins.gif)
 
 ## Run it
 
@@ -48,7 +52,7 @@ Either Rust toolchain works. MSVC (the default) also needs the Windows SDK from 
 The built `pixel_pet.exe` runs on its own; you can copy it anywhere.
 
 - Self-test: `cargo test` (add `-- --nocapture` to also print what the pet currently sees)
-- Regenerate the animated preview: `target\release\pixel_pet.exe --preview` writes `pet_preview.gif` (every mood in every skin) to the current folder
+- Regenerate the animated preview: `target\release\pixel_pet.exe --preview` writes `pet_preview.gif` (the moods) and `pet_skins.gif` (the moods in each skin) to the current folder
 
 ## Where the limits come from
 
