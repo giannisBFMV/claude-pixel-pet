@@ -16,13 +16,18 @@ A tiny pixel-art pet that sits on your Windows desktop and reacts to how you use
 
 ## Run it
 
-Windows only. If you have [Node.js](https://nodejs.org), one command puts the pet on your desktop:
+Windows only. If you have [Node.js](https://nodejs.org), one command puts the pet on your desktop ([npm package](https://www.npmjs.com/package/claude-pixel-pet)):
 
 ```
 npx claude-pixel-pet
 ```
 
-Running it again while the pet is already out does nothing, so you never get two.
+Running it again while the pet is already out does nothing, so you never get two. npx keeps the copy it downloaded; to get the newest version, run `npx claude-pixel-pet@latest`.
+
+### Using it
+
+- Drag it with the left mouse button.
+- Right-click it to see your usage and where the numbers come from, preview any mood, or quit.
 
 ### Build from source
 
@@ -39,10 +44,6 @@ Either Rust toolchain works. MSVC (the default) also needs the Windows SDK from 
 
 The built `pixel_pet.exe` runs on its own; you can copy it anywhere.
 
-### Using it
-
-- Drag it with the left mouse button.
-- Right-click it to see your usage, preview any mood, or quit.
 - Self-test: `cargo test` (add `-- --nocapture` to also print what the pet currently sees)
 - Regenerate the animated preview: `target\release\pixel_pet.exe --preview` writes `pet_preview.gif` to the current folder
 
@@ -78,7 +79,7 @@ The pet only reads local files: Claude Code's logs in `~/.claude/projects` and `
 
 ## Publishing a new version (maintainers)
 
-Bump `version` in `package.json` (and `Cargo.toml`), then run `npm publish`. It runs `cargo build --release` first and ships the fresh `pixel_pet.exe` inside the package.
+Bump `version` in `package.json` (and `Cargo.toml`), then run `npm publish`. It runs `cargo build --release` first and ships the fresh `pixel_pet.exe` inside the package. npm asks you to confirm with two-factor authentication in the browser, and the new version can take a few minutes to appear.
 
 ## License
 
