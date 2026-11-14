@@ -1,6 +1,6 @@
 # CLaude Pixel Pet
 
-A tiny pixel-art pet that sits on your Windows desktop and reacts to how you use Claude Code.
+A tiny pixel-art pet that sits on your Windows desktop and reacts to how you use Claude Code. Written in Rust: one small `.exe`, about 13 MB of memory while running.
 
 ![The five moods, animated: idle, working, sleeping, scream, RIP](pet_preview.gif)
 
@@ -16,19 +16,23 @@ A tiny pixel-art pet that sits on your Windows desktop and reacts to how you use
 
 ## Run it
 
-Windows only. It's a single `pixel_pet.exe` with no runtime to install.
-
-Build it with [Rust](https://rustup.rs) (either the MSVC or the GNU toolchain works):
+Windows only. Install [Rust](https://rustup.rs), then build and start it:
 
 ```
+git clone https://github.com/giannisBFMV/claude-pixel-pet.git
+cd claude-pixel-pet
 cargo build --release
 target\release\pixel_pet.exe
 ```
 
+Either Rust toolchain works. MSVC (the default) also needs the Windows SDK from the Visual Studio Installer. GNU needs nothing else: `rustup toolchain install stable-x86_64-pc-windows-gnu`, then `rustup override set stable-x86_64-pc-windows-gnu` in the project folder.
+
+The built `pixel_pet.exe` runs on its own; you can copy it anywhere.
+
 - Drag it with the left mouse button.
 - Right-click it to see your usage, preview any mood, or quit.
 - Self-test: `cargo test` (add `-- --nocapture` to also print what the pet currently sees)
-- Regenerate the animated preview: `pixel_pet.exe --preview` writes `pet_preview.gif` to the current folder
+- Regenerate the animated preview: `target\release\pixel_pet.exe --preview` writes `pet_preview.gif` to the current folder
 
 ## Where the limits come from
 
@@ -48,7 +52,7 @@ echo "$input" | jq -c '.rate_limits // empty' > ~/.claude/pet_limits.json.tmp &&
 
 The numbers refresh whenever the status line runs (Claude Code in a terminal). Right-click the pet: it says `source: Claude`.
 
-**Fallback estimate.** Without that file, the pet adds up the tokens in your Claude Code logs over a rolling 5 hours and 7 days and compares them to `FIVE_H_LIMIT` and `WEEK_LIMIT` at the top of `src/main.rs`. Tune those to your plan.
+**Fallback estimate.** Without that file, the pet adds up the tokens in your Claude Code logs over a rolling 5 hours and 7 days and compares them to `FIVE_H_LIMIT` and `WEEK_LIMIT` at the top of `src/main.rs`. Tune those to your plan, then rebuild with `cargo build --release`.
 
 ## Privacy
 
