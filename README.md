@@ -1,4 +1,4 @@
-# CLaude Pixel Pet
+# Claude Pixel Pet
 
 A tiny pixel-art pet that sits on your Windows desktop and reacts to how you use Claude Code. Written in Rust: one small `.exe`, about 13 MB of memory while running.
 
