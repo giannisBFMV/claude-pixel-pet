@@ -16,7 +16,17 @@ A tiny pixel-art pet that sits on your Windows desktop and reacts to how you use
 
 ## Run it
 
-Windows only. Install [Rust](https://rustup.rs), then build and start it:
+Windows only. If you have [Node.js](https://nodejs.org), one command puts the pet on your desktop:
+
+```
+npx claude-pixel-pet
+```
+
+Running it again while the pet is already out does nothing, so you never get two.
+
+### Build from source
+
+Install [Rust](https://rustup.rs), then build and start it:
 
 ```
 git clone https://github.com/giannisBFMV/claude-pixel-pet.git
@@ -28,6 +38,8 @@ target\release\pixel_pet.exe
 Either Rust toolchain works. MSVC (the default) also needs the Windows SDK from the Visual Studio Installer. GNU needs nothing else: `rustup toolchain install stable-x86_64-pc-windows-gnu`, then `rustup override set stable-x86_64-pc-windows-gnu` in the project folder.
 
 The built `pixel_pet.exe` runs on its own; you can copy it anywhere.
+
+### Using it
 
 - Drag it with the left mouse button.
 - Right-click it to see your usage, preview any mood, or quit.
@@ -62,7 +74,11 @@ The pet only reads local files: Claude Code's logs in `~/.claude/projects` and `
 
 - Windows only (window detection and the see-through window use Windows APIs).
 - Detects the Claude desktop app and the native `claude.exe` CLI; an npm-installed CLI (`node.exe`) isn't detected as an open window.
-- Doesn't start with Windows by itself. To do that, put a shortcut to `pixel_pet.exe` in your Startup folder (`Win+R` → `shell:startup`).
+- Doesn't start with Windows by itself. To do that, put a shortcut to `pixel_pet.exe` (or a `.cmd` file containing `npx claude-pixel-pet`) in your Startup folder (`Win+R` → `shell:startup`).
+
+## Publishing a new version (maintainers)
+
+Bump `version` in `package.json` (and `Cargo.toml`), then run `npm publish`. It runs `cargo build --release` first and ships the fresh `pixel_pet.exe` inside the package.
 
 ## License
 

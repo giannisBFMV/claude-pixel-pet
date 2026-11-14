@@ -1,0 +1,31 @@
+{
+  "name": "claude-pixel-pet",
+  "version": "0.1.0",
+  "description": "A tiny pixel pet for your Windows desktop that reacts to your Claude Code usage",
+  "bin": {
+    "claude-pixel-pet": "bin/claude-pixel-pet.js"
+  },
+  "files": [
+    "bin/",
+    "target/release/pixel_pet.exe"
+  ],
+  "os": [
+    "win32"
+  ],
+  "scripts": {
+    "prepack": "cargo build --release"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "desktop-pet",
+    "pixel-art",
+    "windows"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/giannisBFMV/claude-pixel-pet.git"
+  },
+  "homepage": "https://github.com/giannisBFMV/claude-pixel-pet#readme",
+  "license": "MIT"
+}

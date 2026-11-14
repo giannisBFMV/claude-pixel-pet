@@ -477,6 +477,9 @@ fn run() {
     unsafe {
         let inst = GetModuleHandleW(ptr::null());
         let class = wide("ClaudePixelPet");
+        if !FindWindowW(class.as_ptr(), ptr::null()).is_null() {
+            return; // already on the desktop (e.g. `npx claude-pixel-pet` run twice)
+        }
         let mut wc: WNDCLASSW = std::mem::zeroed();
         wc.lpfnWndProc = Some(wndproc);
         wc.hInstance = inst;
