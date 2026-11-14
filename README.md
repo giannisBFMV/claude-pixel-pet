@@ -2,7 +2,7 @@
 
 A tiny pixel-art pet that sits on your Windows desktop and reacts to how you use Claude Code.
 
-![The five moods](pet_preview.png)
+![The five moods, animated: idle, working, sleeping, scream, RIP](pet_preview.gif)
 
 | Mood | When |
 |---|---|
@@ -25,6 +25,7 @@ pythonw pixel_pet.py
 - Drag it with the left mouse button.
 - Right-click it to see your usage, preview any mood, or quit.
 - Self-test: `python pixel_pet.py --test`
+- Regenerate the animated preview: `pip install pillow`, then `python pixel_pet.py --preview`
 
 ## Where the limits come from
 

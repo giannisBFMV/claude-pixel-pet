@@ -293,5 +293,17 @@ if __name__ == "__main__":
         for s in STATES:
             assert all(0 <= x < W and 0 <= y < H for x, y in frame(s, 3)), s
         print("ok; current usage (5h, week, idle secs):", read_usage())
+    elif "--preview" in sys.argv:  # writes pet_preview.gif for the README (needs: pip install pillow)
+        from PIL import Image, ImageDraw
+        frames = []
+        for t in range(48):  # 48 ticks = 12 s, a whole cycle of every animation (blink 16, Zz 6, flower 8)
+            img = Image.new("RGB", (W * S * len(STATES), H * S), "#28201c")
+            d = ImageDraw.Draw(img)
+            for i, s in enumerate(STATES):
+                for (x, y), c in frame(s, t).items():
+                    d.rectangle([(i * W + x) * S, y * S, (i * W + x + 1) * S - 1, (y + 1) * S - 1], fill=c)
+            frames.append(img)
+        frames[0].save("pet_preview.gif", save_all=True, append_images=frames[1:], duration=250, loop=0)
+        print("wrote pet_preview.gif")
     else:
         Pet()
