@@ -58,6 +58,7 @@ const RIP: [[&str; 5]; 3] = [
     ["XX.", "X.X", "XX.", "X..", "X.."],
 ];
 const STATES: [&str; 5] = ["idle", "working", "sleeping", "scream", "rip"];
+const SKINS: [&str; 5] = ["none", "headphones", "crown", "cat ears", "beanie"];
 
 type Px = HashMap<(i32, i32), u32>;
 
@@ -279,8 +280,41 @@ fn layer(px: &mut Px, part: &Px, edge: bool) {
     px.extend(part);
 }
 
-/// The pixels for this state at tick t.
-fn frame(state: &str, t: u32) -> Px {
+/// The accessory for a skin, fitted to the top of the head (head top is y = BY), moved down by dy.
+fn accessory(skin: &str, fur: u32, dy: i32) -> Px {
+    let mut a = Px::new();
+    match skin {
+        "headphones" => {
+            a.extend(rect(10, 9, 21, 9, 0x5e5e5e)); // band over the head
+            a.extend([((9, 10), 0x5e5e5e), ((22, 10), 0x5e5e5e)]);
+            a.extend(rect(7, 11, 9, 13, 0x5e5e5e)); // ear cups, clear of the eyes
+            a.extend(rect(22, 11, 24, 13, 0x5e5e5e));
+            a.extend([((8, 12), 0xe0533d), ((23, 12), 0xe0533d)]);
+        }
+        "crown" => {
+            a.extend(cells(&["X..XX..X", "XX.XX.XX", "XXXXXXXX"], 12, 7, 0xf5c542));
+            a.extend(rect(12, 10, 19, 10, 0xd4a017));
+            a.extend([((13, 10), 0x4fc3f7), ((15, 10), 0xe53935), ((16, 10), 0xe53935), ((18, 10), 0x4fc3f7)]);
+        }
+        "cat ears" => {
+            a.extend(cells(&["X..........X", "XX........XX", "XXX......XXX"], 10, 8, fur));
+            a.extend([((11, 10), 0xf4a7b9), ((20, 10), 0xf4a7b9)]); // pink inside
+        }
+        "beanie" => {
+            a.extend(rect(15, 6, 16, 6, 0xefe6d0)); // pom-pom
+            a.extend(rect(12, 7, 19, 7, 0x3f7fbf));
+            a.extend(rect(11, 8, 20, 8, 0x3f7fbf));
+            a.extend(rect(10, 9, 21, 10, 0x3f7fbf));
+            a.extend((10..=21).map(|x| ((x, 11), if x % 2 == 1 { 0x2c5f94 } else { 0x24507d }))); // ribbed brim over the top of the head
+            a.extend([((13, 8), 0x5a9ad6), ((17, 9), 0x5a9ad6), ((14, 7), 0x5a9ad6)]); // knit highlights
+        }
+        _ => {}
+    }
+    a.into_iter().map(|((x, y), c)| ((x, y + dy), c)).collect()
+}
+
+/// The pixels for this state at tick t, wearing this skin.
+fn frame(state: &str, t: u32, skin: &str) -> Px {
     let mut px = Px::new();
 
     if state == "rip" {
@@ -290,6 +324,7 @@ fn frame(state: &str, t: u32) -> Px {
             .map(|((x, y), _)| ((x, y), if x <= 9 { 0xb8bec4 } else if x >= 21 { 0x7d838a } else { 0x9aa0a6 }))
             .collect();
         layer(&mut px, &stone, true);
+        layer(&mut px, &accessory(skin, SHADE[0], -5), true); // the skin rests on the tombstone
         for (i, letter) in RIP.iter().enumerate() {
             px.extend(cells(letter, 10 + 4 * i as i32, 8, 0x4a4f55));
         }
@@ -323,6 +358,7 @@ fn frame(state: &str, t: u32) -> Px {
         body.extend(cells(&right, BX + 11, BY + 3, OUT));
     }
     layer(&mut px, &body, true);
+    layer(&mut px, &accessory(skin, shade[0], 0), true);
 
     match state {
         "sleeping" => {
@@ -374,9 +410,9 @@ fn frame(state: &str, t: u32) -> Px {
 }
 
 /// W*H pixels, row by row, KEY where nothing is drawn.
-fn render(state: &str, t: u32) -> Vec<u32> {
+fn render(state: &str, t: u32, skin: &str) -> Vec<u32> {
     let mut buf = vec![KEY; (W * H) as usize];
-    for ((x, y), c) in frame(state, t) {
+    for ((x, y), c) in frame(state, t, skin) {
         if (0..W).contains(&x) && (0..H).contains(&y) {
             buf[(y * W + x) as usize] = c;
         }
@@ -391,6 +427,23 @@ struct App {
     source: &'static str,
     t: u32,
     usage: Usage,
+    skin: &'static str,
+}
+
+fn settings_file() -> PathBuf {
+    claude_dir().join("pet_settings.json")
+}
+
+/// The saved skin, or "none" if nothing (valid) is saved.
+fn load_skin() -> &'static str {
+    let saved = fs::read_to_string(settings_file()).ok()
+        .and_then(|t| serde_json::from_str::<Value>(&t).ok())
+        .and_then(|d| d["skin"].as_str().map(str::to_string));
+    SKINS.iter().find(|&&s| Some(s) == saved.as_deref()).copied().unwrap_or("none")
+}
+
+fn save_skin(skin: &str) {
+    let _ = fs::write(settings_file(), serde_json::json!({ "skin": skin }).to_string()); // losing this only forgets the skin
 }
 
 impl App {
@@ -405,24 +458,31 @@ impl App {
 
 thread_local! {
     static APP: RefCell<App> = RefCell::new(App {
-        force: None, state: "idle", pcts: (0.0, 0.0), source: "", t: 0, usage: Usage::default(),
+        force: None, state: "idle", pcts: (0.0, 0.0), source: "", t: 0, usage: Usage::default(), skin: "none",
     });
 }
 
-const ID_QUIT: usize = 99; // menu ids: 1 = auto, 2.. = STATES
+const ID_QUIT: usize = 99; // menu ids: 1 = auto, 2.. = STATES, ID_SKIN.. = SKINS
+const ID_SKIN: usize = 21;
 
 unsafe fn show_menu(h: HWND) {
-    let (pcts, source, force) = APP.with(|a| { let a = a.borrow(); (a.pcts, a.source, a.force) });
+    let (pcts, source, force, skin) = APP.with(|a| { let a = a.borrow(); (a.pcts, a.source, a.force, a.skin) });
     let m = CreatePopupMenu();
-    let add = |flags: u32, id: usize, label: &str| { AppendMenuW(m, flags, id, wide(label).as_ptr()); };
-    add(MF_STRING | MF_GRAYED, 0, &format!("5h: {:.0}%   week: {:.0}%", pcts.0, pcts.1));
-    add(MF_STRING | MF_GRAYED, 0, &format!("source: {source}"));
+    let add = |menu: HMENU, flags: u32, id: usize, label: &str| { AppendMenuW(menu, flags, id, wide(label).as_ptr()); };
+    add(m, MF_STRING | MF_GRAYED, 0, &format!("5h: {:.0}%   week: {:.0}%", pcts.0, pcts.1));
+    add(m, MF_STRING | MF_GRAYED, 0, &format!("source: {source}"));
     AppendMenuW(m, MF_SEPARATOR, 0, ptr::null());
     for (i, s) in [None].into_iter().chain(STATES.map(Some)).enumerate() {
-        add(MF_STRING | if s == force { MF_CHECKED } else { 0 }, i + 1, s.unwrap_or("auto"));
+        add(m, MF_STRING | if s == force { MF_CHECKED } else { 0 }, i + 1, s.unwrap_or("auto"));
     }
     AppendMenuW(m, MF_SEPARATOR, 0, ptr::null());
-    add(MF_STRING, ID_QUIT, "Quit");
+    let skins = CreatePopupMenu(); // destroyed together with m
+    for (i, s) in SKINS.iter().enumerate() {
+        add(skins, MF_STRING | if *s == skin { MF_CHECKED } else { 0 }, ID_SKIN + i, s);
+    }
+    add(m, MF_POPUP, skins as usize, "Skin");
+    AppendMenuW(m, MF_SEPARATOR, 0, ptr::null());
+    add(m, MF_STRING, ID_QUIT, "Quit");
     let mut p = POINT { x: 0, y: 0 };
     GetCursorPos(&mut p);
     SetForegroundWindow(h); // so the menu closes when you click elsewhere
@@ -432,6 +492,11 @@ unsafe fn show_menu(h: HWND) {
     match id {
         ID_QUIT => { DestroyWindow(h); }
         1..=6 => APP.with(|a| a.borrow_mut().force = if id == 1 { None } else { Some(STATES[id - 2]) }),
+        _ if (ID_SKIN..ID_SKIN + SKINS.len()).contains(&id) => {
+            let s = SKINS[id - ID_SKIN];
+            APP.with(|a| a.borrow_mut().skin = s);
+            save_skin(s);
+        }
         _ => {}
     }
 }
@@ -449,7 +514,7 @@ unsafe extern "system" fn wndproc(h: HWND, msg: u32, wp: WPARAM, lp: LPARAM) -> 
         WM_PAINT => {
             let mut ps: PAINTSTRUCT = std::mem::zeroed();
             let hdc = BeginPaint(h, &mut ps);
-            let buf = APP.with(|a| { let a = a.borrow(); render(a.force.unwrap_or(a.state), a.t) });
+            let buf = APP.with(|a| { let a = a.borrow(); render(a.force.unwrap_or(a.state), a.t, a.skin) });
             let mut bi: BITMAPINFO = std::mem::zeroed();
             bi.bmiHeader.biSize = std::mem::size_of::<BITMAPINFOHEADER>() as u32;
             bi.bmiHeader.biWidth = W;
@@ -494,7 +559,7 @@ fn run() {
             x, y, w, h, ptr::null_mut(), ptr::null_mut(), inst, ptr::null(),
         );
         SetLayeredWindowAttributes(hwnd, KEY, 0, LWA_COLORKEY);
-        APP.with(|a| a.borrow_mut().poll());
+        APP.with(|a| { let mut a = a.borrow_mut(); a.skin = load_skin(); a.poll(); });
         SetTimer(hwnd, 1, 250, None); // animation tick
         SetTimer(hwnd, 2, 3000, None); // usage poll
         let mut msg: MSG = std::mem::zeroed();
@@ -505,22 +570,25 @@ fn run() {
     }
 }
 
-/// Writes pet_preview.gif for the README: every mood side by side, animated.
+/// Writes pet_preview.gif for the README: every mood (columns) in every skin (rows), animated.
 fn preview() -> Result<(), Box<dyn std::error::Error>> {
-    let (fw, fh) = ((W * S * STATES.len() as i32) as usize, (H * S) as usize);
+    let (cw, ch) = ((W * S) as usize, (H * S) as usize);
+    let (fw, fh) = (cw * STATES.len(), ch * SKINS.len());
     let mut enc = gif::Encoder::new(fs::File::create("pet_preview.gif")?, fw as u16, fh as u16, &[])?;
     enc.set_repeat(gif::Repeat::Infinite)?;
     for t in 0..48 {
         // 48 ticks = 12 s, a whole cycle of every animation (blink 16, Zz 6, flower 8)
         let mut rgb = vec![0u8; fw * fh * 3];
-        for (i, s) in STATES.iter().enumerate() {
-            let buf = render(s, t);
-            for py in 0..fh {
-                for px in 0..(W * S) as usize {
-                    let c = buf[(py / S as usize) * W as usize + px / S as usize];
-                    let c = if c == KEY { 0x28201c } else { c };
-                    let o = (py * fw + i * (W * S) as usize + px) * 3;
-                    rgb[o..o + 3].copy_from_slice(&[(c >> 16) as u8, (c >> 8) as u8, c as u8]);
+        for (row, skin) in SKINS.iter().enumerate() {
+            for (col, s) in STATES.iter().enumerate() {
+                let buf = render(s, t, skin);
+                for py in 0..ch {
+                    for px in 0..cw {
+                        let c = buf[(py / S as usize) * W as usize + px / S as usize];
+                        let c = if c == KEY { 0x28201c } else { c };
+                        let o = ((row * ch + py) * fw + col * cw + px) * 3;
+                        rgb[o..o + 3].copy_from_slice(&[(c >> 16) as u8, (c >> 8) as u8, c as u8]);
+                    }
                 }
             }
         }
@@ -561,11 +629,24 @@ mod tests {
 
     #[test]
     fn frames_fit_the_grid() {
-        for s in STATES {
-            for t in 0..48 {
-                assert!(frame(s, t).keys().all(|&(x, y)| (0..W).contains(&x) && (0..H).contains(&y)), "{s} t={t}");
+        for skin in SKINS {
+            for s in STATES {
+                for t in 0..48 {
+                    let f = frame(s, t, skin);
+                    assert!(f.keys().all(|&(x, y)| (0..W).contains(&x) && (0..H).contains(&y)), "{skin} {s} t={t}");
+                }
             }
         }
+    }
+
+    #[test]
+    fn no_skin_draws_exactly_what_it_did_before() {
+        for s in STATES {
+            for t in 0..48 {
+                assert_eq!(frame(s, t, "none"), frame(s, t, "unknown skin"), "{s}");
+            }
+        }
+        assert!(SKINS[1..].iter().all(|k| !accessory(k, 0, 0).is_empty()));
     }
 
     #[test]

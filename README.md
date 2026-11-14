@@ -2,7 +2,7 @@
 
 A tiny pixel-art pet that sits on your Windows desktop and reacts to how you use Claude Code. Written in Rust: one small `.exe`, about 13 MB of memory while running.
 
-![The five moods, animated: idle, working, sleeping, scream, RIP](pet_preview.gif)
+![The five moods (idle, working, sleeping, scream, RIP) in every skin (none, headphones, crown, cat ears, beanie), animated](pet_preview.gif)
 
 | Mood | When |
 |---|---|
@@ -11,6 +11,8 @@ A tiny pixel-art pet that sits on your Windows desktop and reacts to how you use
 | **Sleeping**: Zz | Every Claude window is minimized, or nothing happened for 10 minutes |
 | **Scream** 😱 | You've used 80% of your 5-hour limit |
 | **RIP**: tombstone with a flower | You've used 100% of your weekly limit |
+
+Dress it up with a skin: **headphones**, a **crown**, **cat ears** or a **beanie** (or none). The skin shows in every mood, even on the tombstone.
 
 > Unofficial fan project. Not made by or affiliated with Anthropic.
 
@@ -28,6 +30,7 @@ Running it again while the pet is already out does nothing, so you never get two
 
 - Drag it with the left mouse button.
 - Right-click it to see your usage and where the numbers come from, preview any mood, or quit.
+- Right-click → **Skin** to pick a skin. It's remembered next time (saved in `~/.claude/pet_settings.json`).
 
 ### Build from source
 
@@ -45,7 +48,7 @@ Either Rust toolchain works. MSVC (the default) also needs the Windows SDK from 
 The built `pixel_pet.exe` runs on its own; you can copy it anywhere.
 
 - Self-test: `cargo test` (add `-- --nocapture` to also print what the pet currently sees)
-- Regenerate the animated preview: `target\release\pixel_pet.exe --preview` writes `pet_preview.gif` to the current folder
+- Regenerate the animated preview: `target\release\pixel_pet.exe --preview` writes `pet_preview.gif` (every mood in every skin) to the current folder
 
 ## Where the limits come from
 
@@ -69,7 +72,7 @@ The numbers refresh whenever the status line runs (Claude Code in a terminal). R
 
 ## Privacy
 
-The pet only reads local files: Claude Code's logs in `~/.claude/projects` and `~/.claude/pet_limits.json`. It sends nothing anywhere.
+The pet only reads local files: Claude Code's logs in `~/.claude/projects` and `~/.claude/pet_limits.json`. The only file it writes is `~/.claude/pet_settings.json`, your skin choice. It sends nothing anywhere.
 
 ## Limitations
 
