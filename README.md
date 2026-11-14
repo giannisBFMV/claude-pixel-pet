@@ -1,4 +1,4 @@
-# Pixel Pet
+# CLaude Pixel Pet
 
 A tiny pixel-art pet that sits on your Windows desktop and reacts to how you use Claude Code.
 
