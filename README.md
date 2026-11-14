@@ -16,16 +16,19 @@ A tiny pixel-art pet that sits on your Windows desktop and reacts to how you use
 
 ## Run it
 
-Needs Windows and Python 3 (tkinter is included with the standard installer).
+Windows only. It's a single `pixel_pet.exe` with no runtime to install.
+
+Build it with [Rust](https://rustup.rs) (either the MSVC or the GNU toolchain works):
 
 ```
-pythonw pixel_pet.py
+cargo build --release
+target\release\pixel_pet.exe
 ```
 
 - Drag it with the left mouse button.
 - Right-click it to see your usage, preview any mood, or quit.
-- Self-test: `python pixel_pet.py --test`
-- Regenerate the animated preview: `pip install pillow`, then `python pixel_pet.py --preview`
+- Self-test: `cargo test` (add `-- --nocapture` to also print what the pet currently sees)
+- Regenerate the animated preview: `pixel_pet.exe --preview` writes `pet_preview.gif` to the current folder
 
 ## Where the limits come from
 
@@ -45,7 +48,7 @@ echo "$input" | jq -c '.rate_limits // empty' > ~/.claude/pet_limits.json.tmp &&
 
 The numbers refresh whenever the status line runs (Claude Code in a terminal). Right-click the pet: it says `source: Claude`.
 
-**Fallback estimate.** Without that file, the pet adds up the tokens in your Claude Code logs over a rolling 5 hours and 7 days and compares them to `FIVE_H_LIMIT` and `WEEK_LIMIT` at the top of `pixel_pet.py`. Tune those to your plan.
+**Fallback estimate.** Without that file, the pet adds up the tokens in your Claude Code logs over a rolling 5 hours and 7 days and compares them to `FIVE_H_LIMIT` and `WEEK_LIMIT` at the top of `src/main.rs`. Tune those to your plan.
 
 ## Privacy
 
@@ -55,7 +58,7 @@ The pet only reads local files: Claude Code's logs in `~/.claude/projects` and `
 
 - Windows only (window detection and the see-through window use Windows APIs).
 - Detects the Claude desktop app and the native `claude.exe` CLI; an npm-installed CLI (`node.exe`) isn't detected as an open window.
-- Doesn't start with Windows by itself. To do that, put a shortcut to `pythonw pixel_pet.py` in your Startup folder (`Win+R` → `shell:startup`).
+- Doesn't start with Windows by itself. To do that, put a shortcut to `pixel_pet.exe` in your Startup folder (`Win+R` → `shell:startup`).
 
 ## License
 
