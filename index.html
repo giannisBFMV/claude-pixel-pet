@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Claude Pixel Pet: a desktop pet for Claude Code</title>
-<meta name="description" content="A tiny pixel-art Windows desktop pet that reacts to your Claude Code activity and usage limits. One small Rust .exe. Install with npx claude-pixel-pet.">
+<title>Claude Pixel Pet: Windows desktop companion for Claude Code</title>
+<meta name="description" content="A lightweight Windows desktop pet that shows your Claude Code activity and usage limits at a glance. A single Rust executable. Install with npx claude-pixel-pet.">
 <link rel="canonical" href="https://giannisbfmv.github.io/claude-pixel-pet/">
 <meta name="theme-color" content="#14100e">
 <!-- Google Search Console: paste the verification meta tag here, e.g.
@@ -12,16 +12,16 @@
 -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Claude Pixel Pet">
-<meta property="og:title" content="Claude Pixel Pet: a desktop pet for Claude Code">
-<meta property="og:description" content="A tiny pixel-art pet for your Windows desktop that reacts to how you use Claude Code: working, idle, sleeping, and panicking near your usage limits.">
+<meta property="og:title" content="Claude Pixel Pet: Windows desktop companion for Claude Code">
+<meta property="og:description" content="A lightweight Windows desktop pet that reflects your Claude Code activity and usage limits: working, idle, sleeping, and warning states as limits approach.">
 <meta property="og:url" content="https://giannisbfmv.github.io/claude-pixel-pet/">
 <meta property="og:image" content="https://giannisbfmv.github.io/claude-pixel-pet/pet_preview.gif">
 <meta property="og:image:width" content="800">
 <meta property="og:image:height" content="130">
-<meta property="og:image:alt" content="The pet's five moods: idle, working, sleeping, scream and RIP">
+<meta property="og:image:alt" content="The five status states: idle, working, sleeping, scream and RIP">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Claude Pixel Pet: a desktop pet for Claude Code">
-<meta name="twitter:description" content="A tiny pixel-art Windows desktop pet that reacts to your Claude Code activity and usage limits. npx claude-pixel-pet">
+<meta name="twitter:title" content="Claude Pixel Pet: Windows desktop companion for Claude Code">
+<meta name="twitter:description" content="A lightweight Windows desktop pet that shows your Claude Code activity and usage limits at a glance. npx claude-pixel-pet">
 <meta name="twitter:image" content="https://giannisbfmv.github.io/claude-pixel-pet/pet_preview.gif">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath fill='%23d97757' d='M4 3h8v1h1v1h1v7h-1v1h-1v1h-1v-1H9v1H7v-1H5v1H4v-1H3v-1H2V5h1V4h1z'/%3E%3Cpath fill='%2328201c' d='M5 7h2v2H5zM9 7h2v2H9z'/%3E%3Cpath fill='%23f5c542' d='M7 10h2v1H7z'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,7 +32,7 @@
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   "name": "Claude Pixel Pet",
-  "description": "A tiny pixel-art pet that sits on your Windows desktop and reacts to how you use Claude Code, including your 5-hour and weekly usage limits. Written in Rust.",
+  "description": "A lightweight Windows desktop companion that reflects your Claude Code activity, including 5-hour and weekly usage limits. Free, open source, written in Rust.",
   "operatingSystem": "Windows",
   "applicationCategory": "DeveloperApplication",
   "url": "https://giannisbfmv.github.io/claude-pixel-pet/",
@@ -229,8 +229,8 @@ footer a{color:var(--muted)} footer a:hover{color:var(--text)}
   <div class="hero" id="top">
     <div class="wrap">
       <span class="eyebrow"><i aria-hidden="true"></i>Open source &middot; Windows &middot; Rust</span>
-      <h1>A desktop pet for <span>Claude&nbsp;Code</span></h1>
-      <p class="lede">A tiny pixel-art pet that sits on your Windows desktop and reacts to how you use Claude Code. It types while Claude works, naps when you step away, and screams when you hit your limits. <strong>One small .exe, about 13&nbsp;MB of memory.</strong></p>
+      <h1>Ambient status for <span>Claude&nbsp;Code</span></h1>
+      <p class="lede">A lightweight pixel-art desktop companion for Windows that reflects your Claude Code activity at a glance. It shows when Claude is working, when your session is idle, and when you approach your usage limits. <strong>A single small executable, about 13&nbsp;MB of memory.</strong></p>
 
       <div class="term" role="group" aria-label="Install command">
         <code id="cmd-install"><span class="p" aria-hidden="true">&gt;</span>npx claude-pixel-pet</code>
@@ -248,15 +248,15 @@ footer a{color:var(--muted)} footer a:hover{color:var(--text)}
           npm
         </a>
       </div>
-      <p class="hint">Windows only. Needs <a href="https://nodejs.org">Node.js</a>. Run it again while the pet is out and nothing happens, so you never get two.</p>
+      <p class="hint">Windows only. Requires <a href="https://nodejs.org">Node.js</a>. Running the command again while the pet is open does not start a second instance.</p>
 
       <figure class="frame reveal" style="margin-bottom:0">
         <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>pet_preview.gif</span></div>
         <div class="frame-in" tabindex="0" role="region" aria-label="Animated preview of the five moods">
-          <img src="pet_preview.gif" width="800" height="130" alt="The pet's five moods, animated side by side: idle (blinking), working (typing at a desk), sleeping (Zz), scream, and RIP (a tombstone with a flower)" fetchpriority="high">
+          <img src="pet_preview.gif" width="800" height="130" alt="The five moods, animated side by side: idle (blinking), working (typing at a desk), sleeping (Zz), scream, and RIP (a tombstone with a flower)" fetchpriority="high">
           <div class="labels" aria-hidden="true"><span>Idle</span><span>Working</span><span>Sleeping</span><span>Scream</span><span>RIP</span></div>
         </div>
-        <figcaption class="scroll-hint">Swipe to see all five moods</figcaption>
+        <figcaption class="scroll-hint">Swipe to view all five moods</figcaption>
       </figure>
     </div>
   </div>
@@ -264,38 +264,38 @@ footer a{color:var(--muted)} footer a:hover{color:var(--text)}
   <section id="moods" aria-labelledby="moods-h">
     <div class="wrap">
       <p class="kicker reveal">01 / Moods</p>
-      <h2 id="moods-h" class="reveal">Five moods, driven by what Claude is doing</h2>
-      <p class="sub reveal">The pet watches Claude Code's activity and your usage, and changes how it looks so you can tell at a glance.</p>
+      <h2 id="moods-h" class="reveal">Five states that track Claude Code activity</h2>
+      <p class="sub reveal">The pet monitors Claude Code activity and your usage, and updates its appearance so the current status is clear at a glance.</p>
       <div class="moods">
         <article class="card mood reveal" style="--c:var(--accent2)">
           <div class="sprite" style="background-position:-88px 0" role="img" aria-label="Working pet"></div>
           <span class="tag">Working</span>
-          <h3>Typing at a desk</h3>
-          <p>Claude Code was active in the last 90 seconds.</p>
+          <h3>Active session</h3>
+          <p>Claude Code was active within the last 90 seconds.</p>
         </article>
         <article class="card mood reveal" style="--c:#c9b8ad">
           <div class="sprite" style="background-position:-8px 0" role="img" aria-label="Idle pet"></div>
           <span class="tag">Idle</span>
-          <h3>Blinks now and then</h3>
+          <h3>Standing by</h3>
           <p>Claude is open but quiet, or Claude is closed.</p>
         </article>
         <article class="card mood reveal" style="--c:var(--blue)">
           <div class="sprite" style="background-position:-168px 0" role="img" aria-label="Sleeping pet"></div>
           <span class="tag">Sleeping</span>
-          <h3>Zz</h3>
-          <p>Every Claude window is minimized, or nothing happened for 10 minutes.</p>
+          <h3>Inactive</h3>
+          <p>All Claude windows are minimized, or there has been no activity for 10 minutes.</p>
         </article>
         <article class="card mood reveal" style="--c:var(--gold)">
           <div class="sprite" style="background-position:-248px 0" role="img" aria-label="Screaming pet"></div>
           <span class="tag">Scream</span>
-          <h3>😱</h3>
-          <p>You've used 80% of your 5-hour limit.</p>
+          <h3>Limit warning</h3>
+          <p>Usage has reached 80% of the 5-hour limit.</p>
         </article>
         <article class="card mood reveal" style="--c:#e05d4a">
           <div class="sprite" style="background-position:-328px 0" role="img" aria-label="Tombstone"></div>
           <span class="tag">RIP</span>
-          <h3>Tombstone with a flower</h3>
-          <p>You've used 100% of your weekly limit.</p>
+          <h3>Limit reached</h3>
+          <p>Usage has reached 100% of the weekly limit.</p>
         </article>
       </div>
     </div>
@@ -305,12 +305,12 @@ footer a{color:var(--muted)} footer a:hover{color:var(--text)}
     <div class="wrap split">
       <div>
         <p class="kicker reveal">02 / Skins</p>
-        <h2 id="skins-h" class="reveal">Dress it up</h2>
-        <p class="sub reveal" style="margin-bottom:0">Pick a skin and it shows in every mood, even on the tombstone.</p>
+        <h2 id="skins-h" class="reveal">Customizable skins</h2>
+        <p class="sub reveal" style="margin-bottom:0">Select a skin and it applies across every mood.</p>
         <div class="chips reveal">
           <span class="chip none">None</span><span class="chip">Headphones</span><span class="chip">Crown</span><span class="chip">Cat ears</span><span class="chip">Beanie</span>
         </div>
-        <p class="note reveal">Right-click the pet &rarr; <strong>Skin</strong> to pick one. It's remembered next time, saved in <code>~/.claude/pet_settings.json</code>.</p>
+        <p class="note reveal">Right-click the pet &rarr; <strong>Skin</strong> to select one. Your choice is retained between sessions and saved in <code>~/.claude/pet_settings.json</code>.</p>
       </div>
       <figure class="frame reveal" style="margin:0">
         <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>pet_skins.gif</span></div>
@@ -325,12 +325,12 @@ footer a{color:var(--muted)} footer a:hover{color:var(--text)}
   <section id="limits" aria-labelledby="limits-h">
     <div class="wrap">
       <p class="kicker reveal">03 / How it works</p>
-      <h2 id="limits-h" class="reveal">Where the limits come from</h2>
-      <p class="sub reveal">The Scream and RIP moods need your usage. The pet gets it one of two ways. Right-click it to see your usage and which source it's using.</p>
+      <h2 id="limits-h" class="reveal">Usage limit data sources</h2>
+      <p class="sub reveal">The Scream and RIP moods depend on your usage data, which the pet obtains in one of two ways. Right-click the pet to view your usage and the active source.</p>
       <div class="how">
         <div class="card wide reveal">
           <h3>Real limits <span class="badge">Recommended</span></h3>
-          <p>If you use a Claude Code <a href="https://docs.claude.com/en/docs/claude-code/statusline">status line</a>, add one line to your status line script right after it reads its input. It saves the 5-hour and weekly percentages Claude sends to the status line into <code>~/.claude/pet_limits.json</code>, and the pet reads that file. The numbers refresh whenever the status line runs (Claude Code in a terminal), and the right-click menu says <code>source: Claude</code>.</p>
+          <p>If you use a Claude Code <a href="https://docs.claude.com/en/docs/claude-code/statusline">status line</a>, add one line to your status line script immediately after it reads its input. The line saves the 5-hour and weekly percentages that Claude provides to the status line into <code>~/.claude/pet_limits.json</code>, which the pet reads. Values refresh each time the status line runs (Claude Code in a terminal), and the right-click menu shows <code>source: Claude</code>.</p>
           <div class="code">
             <div class="hd"><span>PowerShell &middot; <span style="color:var(--muted)">$data</span> is the parsed input JSON</span>
               <button class="copy" type="button" data-copy-target="snip-ps" aria-label="Copy PowerShell snippet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span>Copy</span></button></div>
@@ -344,11 +344,11 @@ footer a{color:var(--muted)} footer a:hover{color:var(--text)}
         </div>
         <div class="card reveal">
           <h3>Fallback estimate <span class="badge alt">Automatic</span></h3>
-          <p>Without that file, the pet adds up the tokens in your Claude Code logs over a rolling 5 hours and 7 days and compares them to <code>FIVE_H_LIMIT</code> and <code>WEEK_LIMIT</code> at the top of <code>src/main.rs</code>. Tune those to your plan, then rebuild with <code>cargo build --release</code>.</p>
+          <p>Without that file, the pet totals the tokens in your Claude Code logs over a rolling 5 hours and 7 days and compares them with <code>FIVE_H_LIMIT</code> and <code>WEEK_LIMIT</code> at the top of <code>src/main.rs</code>. Adjust these values to match your plan, then rebuild with <code>cargo build --release</code>.</p>
         </div>
         <div class="card reveal">
           <h3>Activity and windows</h3>
-          <p>Working, idle and sleeping come from recent Claude Code activity and whether Claude's windows are open or minimized. It detects the Claude desktop app and the native <code>claude.exe</code> CLI.</p>
+          <p>The working, idle and sleeping states are derived from recent Claude Code activity and whether Claude windows are open or minimized. The Claude desktop app and the native <code>claude.exe</code> CLI are detected.</p>
         </div>
       </div>
     </div>
@@ -357,7 +357,7 @@ footer a{color:var(--muted)} footer a:hover{color:var(--text)}
   <section id="privacy" aria-labelledby="privacy-h">
     <div class="wrap">
       <p class="kicker reveal">04 / Privacy</p>
-      <h2 id="privacy-h" class="reveal">Local only. Sends nothing.</h2>
+      <h2 id="privacy-h" class="reveal">Local by design. No data transmitted.</h2>
       <p class="sub reveal">No account, no telemetry, no network calls.</p>
       <div class="privacy">
         <div class="card reveal">
@@ -368,12 +368,12 @@ footer a{color:var(--muted)} footer a:hover{color:var(--text)}
         <div class="card reveal">
           <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#f5c542" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></div>
           <h3>Writes one file</h3>
-          <p>Only <code>~/.claude/pet_settings.json</code>, your skin choice.</p>
+          <p>Only <code>~/.claude/pet_settings.json</code>, which stores your skin selection.</p>
         </div>
         <div class="card reveal">
           <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#6fa3db" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg></div>
           <h3>Sends nothing</h3>
-          <p>It sends nothing anywhere. The code is open, so you can check.</p>
+          <p>No data is sent over the network. The source code is open for inspection.</p>
         </div>
       </div>
     </div>
@@ -382,20 +382,20 @@ footer a{color:var(--muted)} footer a:hover{color:var(--text)}
   <section id="use" aria-labelledby="use-h">
     <div class="wrap">
       <p class="kicker reveal">05 / Details</p>
-      <h2 id="use-h" class="reveal">Using it, building it, and the fine print</h2>
-      <p class="sub reveal">To get the newest version, run <code>npx claude-pixel-pet@latest</code>; npx keeps the copy it downloaded.</p>
+      <h2 id="use-h" class="reveal">Usage, build and limitations</h2>
+      <p class="sub reveal">To obtain the newest version, run <code>npx claude-pixel-pet@latest</code>; npx retains the copy it previously downloaded.</p>
       <div class="use">
         <div class="card reveal">
-          <h3>Using it</h3>
+          <h3>Usage</h3>
           <ul>
-            <li>Drag it with the left mouse button.</li>
-            <li>Right-click it to see your usage and where the numbers come from, preview any mood, or quit.</li>
-            <li>Right-click &rarr; <strong>Skin</strong> to pick a skin.</li>
+            <li>Drag the pet with the left mouse button to reposition it.</li>
+            <li>Right-click to view your usage and its source, preview any mood, or quit.</li>
+            <li>Right-click &rarr; <strong>Skin</strong> to select a skin.</li>
           </ul>
         </div>
         <div class="card reveal">
           <h3>Build from source</h3>
-          <p>Install <a href="https://rustup.rs">Rust</a> (MSVC with the Windows SDK, or the GNU toolchain). The built <code>pixel_pet.exe</code> runs on its own; copy it anywhere.</p>
+          <p>Install <a href="https://rustup.rs">Rust</a> (MSVC with the Windows SDK, or the GNU toolchain). The built <code>pixel_pet.exe</code> is self-contained and can be copied to any location.</p>
           <div class="code">
             <div class="hd"><span>Terminal</span>
               <button class="copy" type="button" data-copy-target="snip-build" aria-label="Copy build commands"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span>Copy</span></button></div>
@@ -408,9 +408,9 @@ target\release\pixel_pet.exe</code></pre>
         <div class="card reveal">
           <h3>Limitations</h3>
           <ul>
-            <li>Windows only: window detection and the see-through window use Windows APIs.</li>
-            <li>An npm-installed CLI (<code>node.exe</code>) isn't detected as an open window.</li>
-            <li>Doesn't start with Windows by itself. Put a shortcut to <code>pixel_pet.exe</code>, or a <code>.cmd</code> file containing <code>npx claude-pixel-pet</code>, in your Startup folder (<code>Win+R</code> &rarr; <code>shell:startup</code>).</li>
+            <li>Windows only: window detection and the transparent window rely on Windows APIs.</li>
+            <li>An npm-installed CLI (<code>node.exe</code>) is not detected as an open window.</li>
+            <li>No automatic start with Windows. Place a shortcut to <code>pixel_pet.exe</code>, or a <code>.cmd</code> file containing <code>npx claude-pixel-pet</code>, in your Startup folder (<code>Win+R</code> &rarr; <code>shell:startup</code>).</li>
           </ul>
         </div>
       </div>
@@ -420,9 +420,9 @@ target\release\pixel_pet.exe</code></pre>
   <div class="final">
     <div class="wrap">
       <div class="card reveal">
-        <p class="kicker">Ready?</p>
-        <h2>Put a pet on your desktop</h2>
-        <p class="sub">One command. Free and open source under the MIT license.</p>
+        <p class="kicker">Get started</p>
+        <h2>Install in one command</h2>
+        <p class="sub">Free and open source under the MIT license.</p>
         <div class="term" role="group" aria-label="Install command">
           <code><span class="p" aria-hidden="true">&gt;</span>npx claude-pixel-pet</code>
           <button class="copy" type="button" data-copy="npx claude-pixel-pet" aria-label="Copy install command"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span>Copy</span></button>
@@ -440,7 +440,7 @@ target\release\pixel_pet.exe</code></pre>
   <div class="wrap">
     <div>
       <p style="margin:0 0 6px"><strong style="color:var(--text)">Claude Pixel Pet</strong> &middot; MIT License</p>
-      <p class="disclaimer" style="margin:0">Unofficial fan project. Not made by or affiliated with Anthropic.</p>
+      <p class="disclaimer" style="margin:0">Claude Pixel Pet is an independent, unofficial open-source project and is not affiliated with, endorsed by, or sponsored by Anthropic.</p>
     </div>
     <nav aria-label="Footer">
       <a href="https://github.com/giannisBFMV/claude-pixel-pet">GitHub</a>
