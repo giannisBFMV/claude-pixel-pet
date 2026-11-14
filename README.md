@@ -4,13 +4,13 @@ A tiny pixel-art pet that sits on your Windows desktop and reacts to how you use
 
 ![The five moods, animated: idle, working, sleeping, scream, RIP](pet_preview.gif)
 
-| Mood | When |
-|---|---|
-| **Working**: typing at a desk | Claude Code was active in the last 90 seconds |
-| **Idle**: blinks now and then | Claude is open but quiet, or Claude is closed |
-| **Sleeping**: Zz | Every Claude window is minimized, or nothing happened for 10 minutes |
-| **Scream** 😱 | You've used 80% of your 5-hour limit |
-| **RIP**: tombstone with a flower | You've used 100% of your weekly limit |
+| Mood | Status | When |
+|---|---|---|
+| **Working** | Active session | Claude Code was active within the last 90 seconds |
+| **Idle** | Standing by | Claude is open but quiet, or Claude is closed |
+| **Sleeping** | Inactive | All Claude windows are minimized, or there has been no activity for 10 minutes |
+| **Scream** | Limit warning | Usage has reached 80% of the 5-hour limit |
+| **RIP** | Limit reached | Usage has reached 100% of the weekly limit |
 
 > Unofficial fan project. Not made by or affiliated with Anthropic.
 

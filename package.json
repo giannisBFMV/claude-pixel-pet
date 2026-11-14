@@ -1,6 +1,6 @@
 {
   "name": "claude-pixel-pet",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A tiny pixel pet for your Windows desktop that reacts to your Claude Code usage",
   "bin": {
     "claude-pixel-pet": "bin/claude-pixel-pet.js"
