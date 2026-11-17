@@ -164,8 +164,13 @@ h3{font-size:18px;letter-spacing:-.01em;margin:0 0 6px;font-weight:600}
 .split{display:grid;gap:40px;align-items:center}
 @media (min-width:960px){.split{grid-template-columns:.8fr 1.2fr;gap:64px}}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0}
-.chip{font:12px/1 var(--pixel);padding:9px 12px;border-radius:999px;border:1px solid var(--line2);color:var(--text);background:var(--glass)}
+.chip{display:inline-flex;align-items:center;gap:7px;font:12px/1 var(--pixel);padding:9px 12px;border-radius:999px;border:1px solid var(--line2);color:var(--text);background:var(--glass);cursor:pointer;transition:color .2s,background .2s,border-color .2s,box-shadow .2s}
 .chip.none{color:var(--dim)}
+.chip:hover{background:var(--glass2);border-color:rgba(255,236,224,.28)}
+.chip[aria-checked="true"]{color:#ffe3d6;border-color:var(--accent);background:rgba(217,119,87,.14);box-shadow:inset 0 0 0 1px var(--accent)}
+.chip[aria-checked="true"]::before{content:"";width:6px;height:6px;background:var(--accent2);box-shadow:0 0 8px var(--accent)}
+.skin-img{transition:opacity .18s ease}
+.skin-img.fading{opacity:0}
 .note{font-size:15px;color:var(--muted)}
 
 .how{display:grid;gap:14px}
@@ -317,17 +322,23 @@ footer a{color:var(--muted)} footer a:hover{color:var(--text)}
         <p class="kicker reveal">02 / Skins</p>
         <h2 id="skins-h" class="reveal">Customizable skins</h2>
         <p class="sub reveal" style="margin-bottom:0">Select a skin and it applies across every mood.</p>
-        <div class="chips reveal">
-          <span class="chip none">None</span><span class="chip">Headphones</span><span class="chip">Crown</span><span class="chip">Cat ears</span><span class="chip">Beanie</span>
+        <div class="chips reveal" role="radiogroup" aria-label="Choose a skin" id="skin-chips">
+          <button type="button" class="chip none" role="radio" aria-checked="true" tabindex="0" data-skin="none">None</button>
+          <button type="button" class="chip" role="radio" aria-checked="false" tabindex="-1" data-skin="headphones">Headphones</button>
+          <button type="button" class="chip" role="radio" aria-checked="false" tabindex="-1" data-skin="crown">Crown</button>
+          <button type="button" class="chip" role="radio" aria-checked="false" tabindex="-1" data-skin="cat-ears">Cat ears</button>
+          <button type="button" class="chip" role="radio" aria-checked="false" tabindex="-1" data-skin="beanie">Beanie</button>
         </div>
+        <p class="note reveal" id="skin-hint" hidden>Pick a skin to preview it.</p>
         <p class="note reveal">Right-click the pet &rarr; <strong>Skin</strong> to select one. Your choice is retained between sessions and saved in <code>~/.claude/pet_settings.json</code>.</p>
       </div>
       <figure class="frame reveal" style="margin:0">
-        <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span>pet_skins.gif</span></div>
-        <div class="frame-in" tabindex="0" role="region" aria-label="Animated preview of every mood in each skin">
-          <img src="pet_skins.gif" width="800" height="520" loading="lazy" alt="Every mood in each skin, animated: four rows showing headphones, crown, cat ears and beanie, each across idle, working, sleeping, scream and RIP">
+        <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span id="skin-file">none.gif</span></div>
+        <div class="frame-in" tabindex="0" role="region" aria-label="Animated preview of the five moods in the selected skin">
+          <img class="skin-img" id="skin-img" src="skins/none.gif" width="800" height="130" loading="lazy" alt="The five moods animated, with no skin">
+          <div class="labels" aria-hidden="true"><span>Idle</span><span>Working</span><span>Sleeping</span><span>Scream</span><span>RIP</span></div>
         </div>
-        <figcaption class="scroll-hint">Swipe to see every mood</figcaption>
+        <figcaption class="scroll-hint">Swipe to view all five moods</figcaption>
       </figure>
     </div>
   </section>
@@ -473,6 +484,39 @@ target\release\pixel_pet.exe</code></pre>
     }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
     document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
   }
+
+  // skin picker: radiogroup with roving tabindex; swap the GIF only once the new one is decoded
+  var chips = Array.prototype.slice.call(document.querySelectorAll('#skin-chips [role="radio"]'));
+  var skinImg = document.getElementById('skin-img'), skinFile = document.getElementById('skin-file'), token = 0;
+  document.getElementById('skin-hint').hidden = false;
+  function srcOf(c) { return 'skins/' + c.getAttribute('data-skin') + '.gif'; }
+  function selectSkin(btn) {
+    chips.forEach(function (c) { c.setAttribute('aria-checked', c === btn); c.tabIndex = c === btn ? 0 : -1; });
+    var src = srcOf(btn), name = btn.getAttribute('data-skin'), t = ++token;
+    var alt = name === 'none' ? 'The five moods animated, with no skin' : 'The five moods animated, wearing the ' + btn.textContent.toLowerCase() + ' skin';
+    function apply() { skinImg.src = src; skinImg.alt = alt; skinFile.textContent = name + '.gif'; }
+    var pre = new Image(); pre.src = src;
+    (pre.decode ? pre.decode() : Promise.resolve()).catch(function () {}).then(function () {
+      if (t !== token) return;
+      if (reduce) return apply();
+      skinImg.classList.add('fading');
+      setTimeout(function () { if (t !== token) return; apply(); skinImg.classList.remove('fading'); }, 180);
+    });
+  }
+  chips.forEach(function (c, i) {
+    c.addEventListener('click', function () { if (c.getAttribute('aria-checked') !== 'true') selectSkin(c); });
+    c.addEventListener('keydown', function (ev) {
+      var n = chips.length, j = { ArrowRight: i + 1, ArrowDown: i + 1, ArrowLeft: i - 1, ArrowUp: i - 1, Home: 0, End: n - 1 }[ev.key];
+      if (j === undefined) return;
+      ev.preventDefault();
+      var next = chips[(j + n) % n];
+      next.focus(); if (next !== c) selectSkin(next);
+    });
+  });
+  window.addEventListener('load', function () {
+    function preload() { chips.forEach(function (c) { new Image().src = srcOf(c); }); }
+    window.requestIdleCallback ? requestIdleCallback(preload) : setTimeout(preload, 200);
+  });
 
   function fallbackCopy(text) {
     var ta = document.createElement('textarea');

@@ -1,6 +1,6 @@
 //! Desktop pixel pet that reacts to your Claude Code usage.
 //! Run:     pixel_pet.exe            (drag with left mouse, right-click for menu)
-//! Preview: pixel_pet.exe --preview  (writes pet_preview.gif and pet_skins.gif)
+//! Preview: pixel_pet.exe --preview  (writes pet_preview.gif, pet_skins.gif and skins/*.gif)
 //! Test:    cargo test
 #![windows_subsystem = "windows"]
 
@@ -573,7 +573,12 @@ fn run() {
 /// Writes the README GIFs: pet_preview.gif (every mood) and pet_skins.gif (every mood in each skin).
 fn preview() -> Result<(), Box<dyn std::error::Error>> {
     write_gif("pet_preview.gif", &SKINS[..1])?;
-    write_gif("pet_skins.gif", &SKINS[1..])
+    write_gif("pet_skins.gif", &SKINS[1..])?;
+    fs::create_dir_all("skins")?; // one row per skin, for the website's skin picker
+    for s in SKINS {
+        write_gif(&format!("skins/{}.gif", s.replace(' ', "-")), &[s])?;
+    }
+    Ok(())
 }
 
 /// One animated GIF: moods as columns, the given skins as rows.

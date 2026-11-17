@@ -54,7 +54,7 @@ Either Rust toolchain works. MSVC (the default) also needs the Windows SDK from 
 The built `pixel_pet.exe` runs on its own; you can copy it anywhere.
 
 - Self-test: `cargo test` (add `-- --nocapture` to also print what the pet currently sees)
-- Regenerate the animated preview: `target\release\pixel_pet.exe --preview` writes `pet_preview.gif` (the moods) and `pet_skins.gif` (the moods in each skin) to the current folder
+- Regenerate the animated preview: `target\release\pixel_pet.exe --preview` writes `pet_preview.gif` (the moods) , `pet_skins.gif` (the moods in each skin) and `skins/<skin>.gif` (one per skin, used by the website) to the current folder
 
 ## Where the limits come from
 
